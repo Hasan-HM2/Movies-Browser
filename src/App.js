@@ -39,14 +39,14 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar/>
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Navbar />
+      <Container maxWidth="lg" sx={{ py: 4, marginTop: '4%' }}>
         {isLoading ? (
           <CircularProgress aria-label="Loading…" size={100} />
         ) : (<Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
           {movies.map((item, index) => {
             return (
-              <Grid key={item.id} size={{ xs: 4, sm: 4, md: 4 }} sx={{marginTop: '8%'}}>
+              <Grid key={item.id} size={{ xs: 4, sm: 4, md: 4 }} >
                 <Card sx={{
                   height: '100%',
                   display: 'flex',
@@ -70,12 +70,17 @@ function App() {
                     image={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                     alt={item.title}
                   />
-                  <CardContent sx={{ flexGrow: 1 }}>
+                  <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                     <Typography gutterBottom variant="h5" component="div">
                       {item.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: '#b3b3b3' }}>
-                      {item.overview}
+                    <Typography variant="body2" sx={{ color: '#b3b3b3', flexGrow: 60 }}>
+                      {item.overview.length > 100
+                        ? item.overview.substring(0, 100) + "..."
+                        : item.overview}
+                    </Typography>
+                    <Typography gutterBottom variant="h6" component="div" sx={{ color:'gold' }}>
+                      Year: {item.release_date.substring(0, 4)}
                     </Typography>
                   </CardContent>
                   <CardActions>
