@@ -50,10 +50,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function navbar() {
+export default function Navbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar sx={{
+        backgroundColor: '#0a1929',
+        top: 0,
+        zIndex: 2000,
+        position: 'fixed',
+      }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -70,7 +75,7 @@ export default function navbar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Movies Browser
           </Typography>
           <Search>
             <SearchIconWrapper>

@@ -13,6 +13,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 
+// Othrts
+import Navbar from './navbar';
 
 
 function App() {
@@ -37,13 +39,14 @@ function App() {
 
   return (
     <div className="App">
+      <Navbar/>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         {isLoading ? (
           <CircularProgress aria-label="Loading…" size={100} />
         ) : (<Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
           {movies.map((item, index) => {
             return (
-              <Grid key={item.id} size={{ xs: 2, sm: 4, md: 4 }}>
+              <Grid key={item.id} size={{ xs: 12, sm: 6, md: 4 }} sx={{marginTop: '8%'}}>
                 <Card sx={{
                   height: '100%',
                   display: 'flex',
