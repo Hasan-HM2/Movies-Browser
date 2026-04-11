@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 // Material UI
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -40,21 +40,38 @@ function App() {
       <Container maxWidth="lg" sx={{ py: 4 }}>
         {isLoading ? (
           <CircularProgress aria-label="Loading…" size={100} />
-        ) : (<Grid container spacing={2} sx={{ backgroundColor: 'wheat' }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        ) : (<Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
           {movies.map((item, index) => {
             return (
               <Grid key={item.id} size={{ xs: 2, sm: 4, md: 4 }}>
-                <Card sx={{ maxWidth: 345 }}>
+                <Card sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  backgroundColor: '#1e1e1e',
+                  color: 'white',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.7)',
+                    '& .MuiCardMedia-root': {
+                      filter: 'brightness(1.1)'
+                    }
+                  }
+                }}>
                   <CardMedia
-                    sx={{ height: 450 }}
+                    component="img"
+                    sx={{ height: 450, objectFit: 'cover' }}
                     image={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                    title="green iguana"
+                    alt={item.title}
                   />
-                  <CardContent>
+                  <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="div">
                       {item.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                    <Typography variant="body2" sx={{ color: '#b3b3b3' }}>
                       {item.overview}
                     </Typography>
                   </CardContent>
