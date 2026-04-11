@@ -46,7 +46,7 @@ function App() {
         ) : (<Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
           {movies.map((item, index) => {
             return (
-              <Grid key={item.id} size={{ xs: 12, sm: 6, md: 4 }} sx={{marginTop: '8%'}}>
+              <Grid key={item.id} size={{ xs: 4, sm: 4, md: 4 }} sx={{marginTop: '8%'}}>
                 <Card sx={{
                   height: '100%',
                   display: 'flex',
