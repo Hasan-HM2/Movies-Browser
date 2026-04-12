@@ -24,6 +24,7 @@ function App() {
 
   const [movies, setMovies] = useState([])
   const [isLoading, setLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState("")
   useEffect(() => {
     axios.get('https://api.themoviedb.org/3/movie/popular?api_key=6131397ffac639fd94093eaee78327b0')
       .then((res) => {
@@ -37,15 +38,19 @@ function App() {
       })
   }, [])
 
+  const filteredMovies = movies.filter(movie =>
+    movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   console.log(movies)
 
 
   return (
     <div className="App">
-      <Navbar />
+      <Navbar searchQuery={searchQuery} onSearchQuery={setSearchQuery} />
       <Container maxWidth="lg" sx={{ py: 4, marginTop: '4%' }}>
         {isLoading ? (
-          <div style={{ display: 'flex', justifyContent: 'space-between',flexWrap: 'wrap', marginTop:'4%' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginTop: '4%' }}>
             <CircularProgress aria-label="Loading…" size={100} />
             <CircularProgress aria-label="Loading…" size={100} />
             <CircularProgress aria-label="Loading…" size={100} />
@@ -55,56 +60,60 @@ function App() {
               <LinearProgress color="inherit" aria-label="Loading…" />
             </Stack>
           </div>
-        ) : (<Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
-          {movies.map((item, index) => {
-            return (
-              <Grid key={item.id} size={{ xs: 4, sm: 4, md: 4 }} >
-                <Card sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  backgroundColor: '#1e1e1e',
-                  color: 'white',
-                  borderRadius: '12px',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.7)',
-                    '& .MuiCardMedia-root': {
-                      filter: 'brightness(1.1)'
+        ) : (filteredMovies.length > 0 ? (
+          <Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
+            {filteredMovies.map((item, index) => {
+              return (
+                <Grid key={item.id} size={{ xs: 4, sm: 4, md: 4 }} >
+                  <Card sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    backgroundColor: '#1e1e1e',
+                    color: 'white',
+                    borderRadius: '12px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease-in-out',
+                    '&:hover': {
+                      transform: 'scale(1.05)',
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.7)',
+                      '& .MuiCardMedia-root': {
+                        filter: 'brightness(1.1)'
+                      }
                     }
-                  }
-                }}>
-                  <CardMedia
-                    component="img"
-                    sx={{ height: 450, objectFit: 'cover' }}
-                    image={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                    alt={item.title}
-                  />
-                  <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {item.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: '#b3b3b3', flexGrow: 60 }}>
-                      {item.overview.length > 100
-                        ? item.overview.substring(0, 100) + "..."
-                        : item.overview}
-                    </Typography>
-                    <Typography gutterBottom variant="h6" component="div" sx={{ color: 'gold' }}>
-                      Year: {item.release_date.substring(0, 4)}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">Share</Button>
-                    <Button size="small">Learn More</Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            )
-          })}
-        </Grid>)}
-
+                  }}>
+                    <CardMedia
+                      component="img"
+                      sx={{ height: 450, objectFit: 'cover' }}
+                      image={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                      alt={item.title}
+                    />
+                    <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {item.title}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: '#b3b3b3', flexGrow: 1 }}>
+                        {item.overview.length > 100
+                          ? item.overview.substring(0, 100) + "..."
+                          : item.overview}
+                      </Typography>
+                      <Typography gutterBottom variant="h6" component="div" sx={{ color: 'gold' }}>
+                        Year: {item.release_date.substring(0, 4)}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small">Share</Button>
+                      <Button size="small">Learn More</Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              )
+            })}
+          </Grid>) :
+          <div style={{ color: 'white', fontSize: '20px', textAlign: 'center', marginTop:'10%' }}>
+            No movies found matching your search
+          </div>
+        )}
       </Container>
     </div>
   );
