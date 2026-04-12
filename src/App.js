@@ -12,6 +12,9 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
+import Stack from '@mui/material/Stack';
+
 
 // Othrts
 import Navbar from './navbar';
@@ -42,7 +45,16 @@ function App() {
       <Navbar />
       <Container maxWidth="lg" sx={{ py: 4, marginTop: '4%' }}>
         {isLoading ? (
-          <CircularProgress aria-label="Loading…" size={100} />
+          <div style={{ display: 'flex', justifyContent: 'space-between',flexWrap: 'wrap', marginTop:'4%' }}>
+            <CircularProgress aria-label="Loading…" size={100} />
+            <CircularProgress aria-label="Loading…" size={100} />
+            <CircularProgress aria-label="Loading…" size={100} />
+            <Stack sx={{ width: '100%', color: 'grey.500', marginTop: '20%' }} spacing={2}>
+              <LinearProgress color="secondary" aria-label="Loading…" />
+              <LinearProgress color="success" aria-label="Loading…" />
+              <LinearProgress color="inherit" aria-label="Loading…" />
+            </Stack>
+          </div>
         ) : (<Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
           {movies.map((item, index) => {
             return (
@@ -79,7 +91,7 @@ function App() {
                         ? item.overview.substring(0, 100) + "..."
                         : item.overview}
                     </Typography>
-                    <Typography gutterBottom variant="h6" component="div" sx={{ color:'gold' }}>
+                    <Typography gutterBottom variant="h6" component="div" sx={{ color: 'gold' }}>
                       Year: {item.release_date.substring(0, 4)}
                     </Typography>
                   </CardContent>
