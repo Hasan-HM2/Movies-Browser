@@ -72,7 +72,6 @@ function App() {
                     backgroundColor: '#1e1e1e',
                     color: 'white',
                     borderRadius: '12px',
-                    cursor: 'pointer',
                     transition: 'all 0.3s ease-in-out',
                     '&:hover': {
                       transform: 'scale(1.05)',
@@ -84,7 +83,7 @@ function App() {
                   }}>
                     <CardMedia
                       component="img"
-                      sx={{ height: 450, objectFit: 'cover' }}
+                      sx={{ height: 450, objectFit: 'cover', cursor:'pointer' }}
                       image={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                       alt={item.title}
                     />
