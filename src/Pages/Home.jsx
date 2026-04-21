@@ -17,7 +17,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import Rating from "@mui/material/Rating";
+import { Pagination } from "@mui/material";
 
 // Lybraries
 import { Link } from "react-router-dom";
@@ -47,11 +47,12 @@ export default function Home({ searchQuery }) {
 
   const [movies, setMovies] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     axios
       .get(
-        "https://api.themoviedb.org/3/movie/popular?api_key=6131397ffac639fd94093eaee78327b0",
+        `https://api.themoviedb.org/3/movie/popular?api_key=6131397ffac639fd94093eaee78327b0&page=${page}`,
       )
       .then((res) => {
         const moviesArray = res.data.results;
@@ -62,7 +63,7 @@ export default function Home({ searchQuery }) {
         console.log(err);
         setLoading(false);
       });
-  }, []);
+  }, [page]);
 
   console.log(movies);
 
@@ -95,7 +96,7 @@ export default function Home({ searchQuery }) {
           </div>
         ) : filteredMovies.length > 0 ? (
           <Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
-            {filteredMovies.map((movie, index) => {
+            {filteredMovies.map((movie) => {
               return (
                 <Grid key={movie.id} size={{ xs: 4, sm: 4, md: 4 }}>
                   <Card
@@ -143,25 +144,18 @@ export default function Home({ searchQuery }) {
                           display: "flex",
                           alignItems: "center",
                           mb: 2,
-                          mt:1,
-                          backgroundColor: "#c2c2c24d",
-                          borderRadius: "40px",
-                          width: "50%",
-                          paddingLeft: "9px",
+                          mt: 1,
                         }}
                       >
-                        <Rating
-                          value={movie.vote_average / 2}
-                          precision={0.5}
-                          readOnly
-                          size="small"
-                        />
-
                         <Typography
-                          variant="body2"
-                          sx={{ ml: 1, color: "text.secondary" }}
+                          variant="body1"
+                          sx={{ ml: 1, color: "white" }}
                         >
-                          ({movie.vote_average.toFixed(1)})
+                          {movie.vote_average.toFixed(1)}
+                        </Typography>
+
+                        <Typography sx={{ ml: 1, color: "white", fontSize:'18px' }}>
+                          ⭐
                         </Typography>
                       </Box>
 
@@ -228,6 +222,26 @@ export default function Home({ searchQuery }) {
             No movies found matching your search
           </div>
         )}
+
+        {/* Next Movies page */}
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 5, mb: 5 }}>
+          <Pagination
+            count={500} // TMDB يسمح بـ 500 صفحة كحد أقصى للطلبات العادية
+            page={page}
+            onChange={(event, value) => {
+              setLoading(true);
+              setPage(value);
+              setMovies([]);
+              window.scrollTo(0, 0); // العودة لأعلى الصفحة عند تبديل الصفحة
+            }}
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+            sx={{
+              "& .MuiPaginationItem-root": { color: "white" }, // لتناسب الثيم الغامق لديك
+            }}
+          />
+        </Box>
       </Container>
     </div>
   );

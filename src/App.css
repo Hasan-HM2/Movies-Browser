@@ -7,4 +7,5 @@ body {
 
 .App {
   min-height: calc(100vh - 63.993px);
+  scroll-behavior: smooth !important;
 }
