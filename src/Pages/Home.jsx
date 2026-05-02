@@ -30,9 +30,9 @@ export default function Home() {
     page,
     genreMap,
     filteredMovies,
+    setSearchQuery,
     isLoading,
   } = useContext(MovieContext);
-
 
   return (
     <div>
@@ -196,6 +196,7 @@ export default function Home() {
             page={page}
             onChange={(event, value) => {
               setLoading(true);
+              setSearchQuery("");
               setPage(value);
               setMovies([]);
               window.scrollTo(0, 0); // العودة لأعلى الصفحة عند تبديل الصفحة
