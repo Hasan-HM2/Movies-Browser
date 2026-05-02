@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { MovieContext } from "../context/MovieContext";
 
 // Material UI
 import Container from "@mui/material/Container";
@@ -22,54 +22,18 @@ import { Pagination } from "@mui/material";
 // Lybraries
 import { Link } from "react-router-dom";
 
-export default function Home({ searchQuery }) {
-  const genreMap = {
-    28: "Action",
-    12: "Adventure",
-    16: "Animation",
-    35: "Comedy",
-    80: "Crime",
-    99: "Documentary",
-    18: "Drama",
-    10751: "Family",
-    14: "Fantasy",
-    36: "History",
-    27: "Horror",
-    10402: "Music",
-    9648: "Mystery",
-    10749: "Romance",
-    878: "Sci-Fi",
-    10770: "TV Movie",
-    53: "Thriller",
-    10752: "War",
-    37: "Western",
-  };
+export default function Home() {
+  const {
+    setMovies,
+    setPage,
+    setLoading,
+    page,
+    genreMap,
+    filteredMovies,
+    isLoading,
+  } = useContext(MovieContext);
 
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=6131397ffac639fd94093eaee78327b0&page=${page}`,
-      )
-      .then((res) => {
-        const moviesArray = res.data.results;
-        setMovies(moviesArray);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  }, [page]);
-
-  console.log(movies);
-
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
   return (
     <div>
       <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -154,7 +118,9 @@ export default function Home({ searchQuery }) {
                           {movie.vote_average.toFixed(1)}
                         </Typography>
 
-                        <Typography sx={{ ml: 1, color: "white", fontSize:'18px' }}>
+                        <Typography
+                          sx={{ ml: 1, color: "white", fontSize: "18px" }}
+                        >
                           ⭐
                         </Typography>
                       </Box>
@@ -226,7 +192,7 @@ export default function Home({ searchQuery }) {
         {/* Next Movies page */}
         <Box sx={{ display: "flex", justifyContent: "center", mt: 5, mb: 5 }}>
           <Pagination
-            count={500} // TMDB يسمح بـ 500 صفحة كحد أقصى للطلبات العادية
+            count={500}
             page={page}
             onChange={(event, value) => {
               setLoading(true);
@@ -238,7 +204,7 @@ export default function Home({ searchQuery }) {
             variant="outlined"
             shape="rounded"
             sx={{
-              "& .MuiPaginationItem-root": { color: "white" }, // لتناسب الثيم الغامق لديك
+              "& .MuiPaginationItem-root": { color: "white" },
             }}
           />
         </Box>

@@ -1,3 +1,7 @@
+import { useContext } from 'react';
+import { MovieContext } from './context/MovieContext';
+
+// Material UI
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -50,7 +54,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbar({searchQuery, onSearchQuery}) {
+export default function Navbar() {
+  const { searchQuery, setSearchQuery } = useContext(MovieContext)
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar sx={{
@@ -85,7 +91,7 @@ export default function Navbar({searchQuery, onSearchQuery}) {
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
               value={searchQuery}
-              onChange={(e) => {onSearchQuery(e.target.value)}}
+              onChange={(e) => { setSearchQuery(e.target.value) }}
             />
           </Search>
         </Toolbar>

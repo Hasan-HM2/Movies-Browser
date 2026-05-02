@@ -21,7 +21,7 @@ function App() {
       <Navbar searchQuery={searchQuery} onSearchQuery={setSearchQuery} />
       <Box sx={{ pt: '80px', pb: 2 }}>
         <Routes>
-          <Route path='/' element={<Home searchQuery={searchQuery} />} />
+          <Route path='/' element={<Home />} />
           <Route path='/movie/:id' element={<MovieDetails />} />
         </Routes>
       </Box>
