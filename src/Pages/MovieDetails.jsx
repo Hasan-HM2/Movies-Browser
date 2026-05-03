@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import LanguageIcon from "@mui/icons-material/Language";
 import PublicIcon from "@mui/icons-material/Public";
 import Stack from "@mui/material/Stack";
+import LinearProgress from "@mui/material/LinearProgress";
 
 // Lybraries
 import axios from "axios";
@@ -38,11 +39,18 @@ export default function MovieDetails() {
   console.log(movie);
   if (loading)
     return (
-      <Typography
-        sx={{ textAlign: "center", fontSize: "30px", color: "white" }}
+      <Stack
+        sx={{
+          width: "60%",
+          color: "grey.500",
+          margin: "10% auto",
+        }}
+        spacing={2}
       >
-        Loading ...
-      </Typography>
+        <LinearProgress color="secondary" aria-label="Loading…" />
+        <LinearProgress color="success" aria-label="Loading…" />
+        <LinearProgress color="inherit" aria-label="Loading…" />
+      </Stack>
     );
   return (
     <div>
