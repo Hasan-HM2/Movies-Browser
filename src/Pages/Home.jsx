@@ -43,14 +43,15 @@ export default function Home() {
               display: "flex",
               justifyContent: "space-between",
               flexWrap: "wrap",
-              marginTop: "4%",
+              margin: "4% auto",
+              width:'80%'
             }}
           >
-            <CircularProgress aria-label="Loading…" size={100} />
-            <CircularProgress aria-label="Loading…" size={100} />
-            <CircularProgress aria-label="Loading…" size={100} />
+            <CircularProgress aria-label="Loading…" size={70} />
+            <CircularProgress aria-label="Loading…" size={70} />
+            <CircularProgress aria-label="Loading…" size={70} />
             <Stack
-              sx={{ width: "100%", color: "grey.500", marginTop: "20%" }}
+              sx={{ width: "80%", color: "grey.500", margin: "20% auto" }}
               spacing={2}
             >
               <LinearProgress color="secondary" aria-label="Loading…" />
