@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import { Link } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -62,7 +63,6 @@ export default function Navbar() {
       <AppBar sx={{
         backgroundColor: '#0a1929',
         top: 0,
-        zIndex: 2000,
         position: 'fixed',
       }}>
         <Toolbar>
@@ -75,14 +75,18 @@ export default function Navbar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            Movies Browser
-          </Typography>
+
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            >
+              <Link to={'/'} style={{textDecoration:'none', color:'whitesmoke'}}>
+              Movies Browser
+              </Link>
+            </Typography>
+
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -96,6 +100,6 @@ export default function Navbar() {
           </Search>
         </Toolbar>
       </AppBar>
-    </Box>
+    </Box >
   );
 }
