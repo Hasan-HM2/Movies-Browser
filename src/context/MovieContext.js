@@ -30,7 +30,15 @@ export default function MovieProvider({ children }) {
     const [isLoading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
-    const [watchlist, setWatchlist] = useState([])
+    
+    const [watchlist, setWatchlist] = useState(() => {
+        const savedMovies = localStorage.getItem("myWatchlist");
+        return savedMovies ? JSON.parse(savedMovies) : [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem("myWatchlist", JSON.stringify(watchlist));
+    }, [watchlist]);
 
 
     // toggle watchlist
@@ -79,6 +87,7 @@ export default function MovieProvider({ children }) {
             genreMap,
             setLoading,
             watchlist,
+            setWatchlist,
             toggleWatchlist
         }}>
             {children}
