@@ -76,16 +76,27 @@ export default function Navbar() {
             <MenuIcon />
           </IconButton>
 
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-            >
-              <Link to={'/'} style={{textDecoration:'none', color:'whitesmoke'}}>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+          >
+            <Link to={'/'} style={{ textDecoration: 'none', color: 'whitesmoke' }}>
               Movies Browser
-              </Link>
-            </Typography>
+            </Link>
+          </Typography>
+
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+          >
+            <Link to={'/watchlist'} style={{ textDecoration: 'none', color: 'whitesmoke' }}>
+              My List
+            </Link>
+          </Typography>
 
           <Search>
             <SearchIconWrapper>

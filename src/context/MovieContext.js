@@ -30,6 +30,21 @@ export default function MovieProvider({ children }) {
     const [isLoading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
+    const [watchlist, setWatchlist] = useState([])
+
+
+    // toggle watchlist
+    function toggleWatchlist(movie) { // important IEDA with some function
+        const isMovieInWatchlist = watchlist.some((item) => item.id === movie.id)
+
+        if (isMovieInWatchlist) {
+            setWatchlist(watchlist.filter((item) => item.id !== movie.id))
+        }
+        else {
+            setWatchlist([...watchlist, movie])
+        }
+    }
+    // ==== toggle watchlist ====
 
     useEffect(() => {
         axios
@@ -63,6 +78,8 @@ export default function MovieProvider({ children }) {
             setSearchQuery,
             genreMap,
             setLoading,
+            watchlist,
+            toggleWatchlist
         }}>
             {children}
         </MovieContext.Provider>
