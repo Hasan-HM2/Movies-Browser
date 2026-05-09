@@ -1,116 +1,162 @@
-import { useContext } from 'react';
-import { MovieContext } from './context/MovieContext';
+import { useState, useContext } from "react";
 
 // Material UI
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import { Link } from 'react-router-dom';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import InputBase from "@mui/material/InputBase";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Badge from "@mui/material/Badge";
 
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: 'auto',
-    },
-}));
+// Icons
+import SearchIcon from "@mui/icons-material/Search";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import CloseIcon from "@mui/icons-material/Close";
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
+import { useNavigate } from "react-router-dom";
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    width: '100%',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
-    },
-}));
+// Movie Context
+import { MovieContext } from "../src/context/MovieContext";
 
 export default function Navbar() {
-    const { searchQuery, setSearchQuery } = useContext(MovieContext)
+	const navigate = useNavigate();
+	const { searchQuery, setSearchQuery, watchlist } = useContext(MovieContext);
+	const watchlistCount = watchlist?.length || 0;
+	const [showMobileSearch, setShowMobileSearch] = useState(false);
 
-    return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar sx={{
-                backgroundColor: '#0a1929',
-                top: 0,
-                position: 'fixed',
-            }}>
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+	return (
+		<AppBar
+			position="sticky"
+			sx={{ bgcolor: "#121212", backgroundImage: "none" }}
+		>
+			<Toolbar sx={{ justifyContent: "space-between", gap: 1 }}>
+				{showMobileSearch ? (
+					<Box
+						sx={{
+							display: "flex",
+							alignItems: "center",
+							width: "100%",
+							gap: 1,
+						}}
+					>
+						<SearchIcon sx={{ color: "grey.500" }} />
+						<InputBase
+							placeholder="Search movies..."
+							value={searchQuery || ""}
+							onChange={(e) => setSearchQuery && setSearchQuery(e.target.value)} // استدعاء آمن للدالة
+							autoFocus
+							sx={{
+								color: "white",
+								width: "100%",
+								bgcolor: "rgba(255, 255, 255, 0.1)",
+								borderRadius: "8px",
+								px: 1.5,
+								py: 0.5,
+							}}
+						/>
+						<IconButton
+							onClick={() => {
+								setShowMobileSearch(false);
+								if (setSearchQuery) setSearchQuery("");
+							}}
+							sx={{ color: "white" }}
+						>
+							<CloseIcon />
+						</IconButton>
+					</Box>
+				) : (
+					<>
+						<Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+							<Typography
+								variant="h6"
+								noWrap
+								onClick={() => navigate("/")}
+								sx={{
+									fontWeight: "bold",
+									cursor: "pointer",
+									fontSize: { xs: "0.95rem", sm: "1.25rem" }, // مقاس متجاوب لتفادي التداخل في الجوال
+									display: "block",
+								}}
+							>
+								Movies Browser
+							</Typography>
+						</Box>
 
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
-                        <Link to={'/'} style={{ textDecoration: 'none', color: 'whitesmoke' }}>
-                            Movies Browser
-                        </Link>
-                    </Typography>
+						<Box
+							sx={{
+								display: { xs: "none", md: "flex" },
+								alignItems: "center",
+								bgcolor: "rgba(255, 255, 255, 0.08)",
+								borderRadius: "20px",
+								px: 2,
+								py: 0.5,
+								width: "300px",
+								transition: "all 0.3s ease",
+								"&:focus-within": {
+									bgcolor: "rgba(255, 255, 255, 0.15)",
+									width: "350px",
+								},
+							}}
+						>
+							<SearchIcon sx={{ color: "grey.400", mr: 1 }} />
+							<InputBase
+								placeholder="Search movies..."
+								value={searchQuery || ""}
+								onChange={(e) =>
+									setSearchQuery && setSearchQuery(e.target.value)
+								}
+								sx={{ color: "white", width: "100%" }}
+							/>
+						</Box>
 
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
-                        <Link to={'/watchlist'} style={{ textDecoration: 'none', color: 'whitesmoke' }}>
-                            My List
-                        </Link>
-                    </Typography>
+						<Box
+							sx={{
+								display: "flex",
+								alignItems: "center",
+								gap: { xs: 0.5, sm: 1.5 },
+							}}
+						>
+							<IconButton
+								onClick={() => setShowMobileSearch(true)}
+								sx={{ display: { xs: "flex", md: "none" }, color: "white" }}
+							>
+								<SearchIcon />
+							</IconButton>
 
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                            value={searchQuery}
-                            onChange={(e) => { setSearchQuery(e.target.value) }}
-                        />
-                    </Search>
-                </Toolbar>
-            </AppBar>
-        </Box >
-    );
+							<IconButton
+								onClick={() => navigate("/watchlist")}
+								sx={{
+									color: "white",
+									borderRadius: "10px",
+									px: { xs: 1, sm: 2 },
+									py: 1,
+									"&:hover": { bgcolor: "rgba(255,255,255,0.08)" },
+								}}
+							>
+								<Badge
+									badgeContent={watchlistCount}
+									color="error"
+									sx={{ mr: { xs: 0, sm: 1 } }}
+								>
+									<FavoriteIcon sx={{ color: "#ff3d47" }} />
+								</Badge>
+
+								<Typography
+									variant="button"
+									sx={{
+										display: { xs: "none", sm: "block" },
+										fontWeight: "bold",
+										textTransform: "capitalize",
+									}}
+								>
+									My List
+								</Typography>
+							</IconButton>
+						</Box>
+					</>
+				)}
+			</Toolbar>
+		</AppBar>
+	);
 }

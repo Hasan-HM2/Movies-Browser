@@ -24,7 +24,7 @@ export default function MovieCard({ movie }) {
 	return (
 		<Grid
 			size={{ xs: 4, sm: 4, md: 4 }}
-			sx={{ pt: { xs: 10, md: 10 }, pb: { xs: 4, md: 0 } }}
+			sx={{ pt: { xs: 5, md: 5 }, pb: { xs: 4, md: 0 } }}
 		>
 			<Card
 				sx={{

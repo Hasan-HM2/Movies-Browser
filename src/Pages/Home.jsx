@@ -12,6 +12,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import { Pagination } from "@mui/material";
+import Fade from "@mui/material/Fade";
 
 export default function Home() {
 	const {
@@ -26,7 +27,7 @@ export default function Home() {
 
 	return (
 		<div>
-			<Container maxWidth="lg" sx={{ py: 4 }}>
+			<Container maxWidth="lg" sx={{ py: 0 }}>
 				{isLoading ? (
 					<div
 						style={{
@@ -50,11 +51,13 @@ export default function Home() {
 						</Stack>
 					</div>
 				) : filteredMovies.length > 0 ? (
-					<Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
-						{filteredMovies.map((movie) => (
-							<MovieCard key={movie.id} movie={movie} />
-						))}
-					</Grid>
+					<Fade in={!isLoading} timeout={600}>
+						<Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
+							{filteredMovies.map((movie) => (
+								<MovieCard key={movie.id} movie={movie} />
+							))}
+						</Grid>
+					</Fade>
 				) : (
 					<div
 						style={{
