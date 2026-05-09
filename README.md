@@ -16,3 +16,6 @@ A modern, fully responsive movie browsing web application built with **React**, 
 - **Styling:** Material-UI (MUI), CSS
 - **API:** The Movie Database (TMDB) API
 - **State Management:** React Context API
+
+## 🚀 Live Demo
+https://movies-browser-indol.vercel.app/
