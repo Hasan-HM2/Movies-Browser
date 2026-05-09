@@ -32,18 +32,17 @@ export default function MovieDetails() {
 	const { toggleWatchlist, watchlist } = useContext(MovieContext);
 
 	const isFavorite = watchlist.some((item) => item?.id === movie?.id);
+	const apiKey = process.env.REACT_APP_TMDB_API_KEY;
 
 	useEffect(() => {
 		axios
-			.get(
-				`https://api.themoviedb.org/3/movie/${id}?api_key=6131397ffac639fd94093eaee78327b0`,
-			)
+			.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`)
 			.then((res) => {
 				setMovie(res.data);
 				setLoading(false);
 			})
 			.catch((err) => console.log(err));
-	}, [id]);
+	}, [id, apiKey]);
 
 	if (loading)
 		return (
