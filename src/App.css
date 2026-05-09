@@ -1,12 +1,16 @@
-body {
-  background-color: #121212; /* أسود سينمائي عميق */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box !important;
+}
+
+body {
+  background-color: #121212;
   font-family: 'Roboto', sans-serif;
 }
 
 .App {
   min-height: calc(100vh - 63.993px);
   scroll-behavior: smooth !important;
-  
+
 }

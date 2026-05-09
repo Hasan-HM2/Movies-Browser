@@ -1,34 +1,33 @@
-import './App.css';
-import { useState } from 'react';
+import "./App.css";
+import { useState } from "react";
 
 // Lybraries
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 
 // Material UI
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 
 // Othrts
-import Navbar from './navbar';
-import Home from './Pages/Home';
-import MovieDetails from './Pages/MovieDetails';
-import Watchlist from './Pages/Watchlist';
-
+import Navbar from "./navbar";
+import Home from "./Pages/Home";
+import MovieDetails from "./Pages/MovieDetails";
+import Watchlist from "./Pages/Watchlist";
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState("")
+	const [searchQuery, setSearchQuery] = useState("");
 
-  return (
-    <div className="App">
-      <Navbar searchQuery={searchQuery} onSearchQuery={setSearchQuery} />
-      <Box sx={{ pt: '80px', pb: 2 }}>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/movie/:id' element={<MovieDetails />} />
-          <Route path='/watchlist' element={<Watchlist />}/>
-        </Routes>
-      </Box>
-    </div>
-  );
+	return (
+		<div className="App">
+			<Navbar searchQuery={searchQuery} onSearchQuery={setSearchQuery} />
+			<Box sx={{ pt: "auto" }}>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/movie/:id" element={<MovieDetails />} />
+					<Route path="/watchlist" element={<Watchlist />} />
+				</Routes>
+			</Box>
+		</div>
+	);
 }
 
 export default App;
