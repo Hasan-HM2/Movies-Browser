@@ -76,7 +76,7 @@ export default function MovieDetails() {
 					backgroundSize: "cover",
 					backgroundPosition: "center top",
 					backgroundAttachment: { xs: "scroll", md: "fixed" },
-					pt: { xs: 4, md: 10 },
+					pt: { xs: 4, md: 5 },
 					pb: { xs: 4, md: 2 },
 					m: 0,
 					boxSizing: "border-box",
