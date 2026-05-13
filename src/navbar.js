@@ -14,7 +14,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Movie Context
 import { MovieContext } from "../src/context/MovieContext";
@@ -24,6 +24,9 @@ export default function Navbar() {
 	const { searchQuery, setSearchQuery, watchlist } = useContext(MovieContext);
 	const watchlistCount = watchlist?.length || 0;
 	const [showMobileSearch, setShowMobileSearch] = useState(false);
+	const location = useLocation();
+
+	const isWatchlistPage = location.pathname === "/watchlist";
 
 	return (
 		<AppBar
@@ -131,7 +134,15 @@ export default function Navbar() {
 									borderRadius: "10px",
 									px: { xs: 1, sm: 2 },
 									py: 1,
-									"&:hover": { bgcolor: "rgba(255,255,255,0.08)" },
+									bgcolor: isWatchlistPage
+										? "rgba(255, 255, 255, 0.12)"
+										: "transparent",
+									"&:hover": {
+										bgcolor: isWatchlistPage
+											? "rgba(255, 255, 255, 0.18)"
+											: "rgba(255, 255, 255, 0.08)",
+									},
+									transition: "background-color 0.3s ease",
 								}}
 							>
 								<Badge
