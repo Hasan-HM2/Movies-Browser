@@ -11,6 +11,6 @@
 		"**/build/**": true
 	},
 	"typescript.disableAutomaticTypeAcquisition": true,
-	"editor.formatOnSave": true,
+	"editor.formatOnSave": false,
 	"editor.defaultFormatter": "biomejs.biome"
 }

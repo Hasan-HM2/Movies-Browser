@@ -17,6 +17,10 @@ import LinearProgress from "@mui/material/LinearProgress";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Fade from "@mui/material/Fade";
+import Avatar from "@mui/material/Avatar";
+import { Dialog, DialogContent, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 // Libraries
 import axios from "axios";
@@ -30,6 +34,9 @@ export default function MovieDetails() {
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
 	const { toggleWatchlist, watchlist } = useContext(MovieContext);
+	const [cast, setCast] = useState([]);
+	const [videoKey, setVideoKey] = useState("");
+	const [open, setOpen] = useState(false);
 
 	const isFavorite = watchlist.some((item) => item?.id === movie?.id);
 	const apiKey = process.env.REACT_APP_TMDB_API_KEY;
@@ -42,6 +49,27 @@ export default function MovieDetails() {
 				setLoading(false);
 			})
 			.catch((err) => console.log(err));
+
+		axios
+			.get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`)
+			.then((res) => {
+				setCast(res.data.cast);
+			});
+
+		axios
+			.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`)
+			.then((res) => {
+				const trailerObject = res.data.results.find(
+					(item) => item.type === "Trailer" && item.site === "YouTube",
+				);
+
+				if (trailerObject) {
+					setVideoKey(trailerObject.key);
+				} else {
+					const fallbackVideo = res.data.results[0];
+					if (fallbackVideo) setVideoKey(fallbackVideo.key);
+				}
+			});
 	}, [id, apiKey]);
 
 	if (loading)
@@ -70,7 +98,7 @@ export default function MovieDetails() {
 					width: "100%",
 					bgcolor: "#000",
 					backgroundImage: movie?.backdrop_path
-						? `linear-gradient(to bottom, rgba(0, 0, 0, 0.61) 0%, rgb(0, 0, 0) 100%), url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
+						? `linear-gradient(to bottom, rgba(0, 0, 0, 0.71) 0%, rgb(0, 0, 0) 100%), url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
 						: "none",
 					backgroundSize: "cover",
 					backgroundPosition: "center top",
@@ -96,14 +124,19 @@ export default function MovieDetails() {
 						Back to Movies
 					</Button>
 
-					<Grid container spacing={{ xs: 4, md: 6 }} alignItems="flex-start">
+					<Grid
+						container
+						spacing={{ xs: 4, md: 6 }}
+						alignItems="flex-start"
+						justifyContent={{ xs: "center" }}
+					>
 						{/* عمود البوستر المتجاوب */}
 						<Grid
 							xs={12}
 							md={4}
 							sx={{
 								display: "flex",
-								justifyContent: "center",
+								justifyContent: { xs: "center", md: "flex-start" },
 								alignItems: "center",
 							}}
 						>
@@ -112,7 +145,7 @@ export default function MovieDetails() {
 								alt={movie.title}
 								style={{
 									width: "100%",
-									maxWidth: "340px",
+									maxWidth: "330px",
 									borderRadius: "16px",
 									boxShadow: "0px 10px 30px rgba(0,0,0,0.9)",
 								}}
@@ -188,12 +221,43 @@ export default function MovieDetails() {
 
 							<Box
 								sx={{
-									width: "100%",
 									display: "flex",
-									justifyContent: { xs: "center", md: "flex-start" },
-									mb: 4,
+									flexDirection: { xs: "column", sm: "row" },
+									gap: 2,
+									alignItems: "center",
+									justifyContent: "center",
+									mt: 3,
+									width: "100%",
 								}}
 							>
+								{videoKey && (
+									<Button
+										variant="contained"
+										startIcon={<PlayCircleOutlineIcon />}
+										onClick={() => setOpen(true)}
+										sx={{
+											bgcolor: "#ff3d47",
+											color: "white",
+											fontWeight: "bold",
+											textTransform: "capitalize",
+											borderRadius: "30px",
+											marginRight: "1.9%",
+											px: 4,
+											py: 1.2,
+											width: { xs: "100%", sm: "auto" },
+											maxWidth: "340px",
+											boxShadow: "0px 4px 15px rgba(255, 61, 71, 0.3)",
+											transition: "all 0.3s ease",
+											"&:hover": {
+												bgcolor: "#e02e37",
+												transform: "scale(1.05)",
+												boxShadow: "0px 6px 20px rgba(255, 61, 71, 0.5)",
+											},
+										}}
+									>
+										Watch Trailer
+									</Button>
+								)}
 								{isFavorite ? (
 									<Button
 										variant="contained"
@@ -360,7 +424,116 @@ export default function MovieDetails() {
 							</Typography>
 						</Grid>
 					</Grid>
+
+					{/* قسم الممثلين المشاركين */}
+					<Box sx={{ mt: 4, px: 2 }}>
+						<Typography
+							variant="h5"
+							sx={{ fontWeight: "bold", mb: 2, color: "white" }}
+						>
+							Cast
+						</Typography>
+
+						<Box
+							sx={{
+								display: "flex",
+								gap: 2,
+								overflowX: "auto",
+								pb: 2,
+								"&::-webkit-scrollbar": { height: "6px" },
+								"&::-webkit-scrollbar-thumb": {
+									bgcolor: "rgba(255,255,255,0.2)",
+									borderRadius: "4px",
+								},
+							}}
+						>
+							{cast.slice(0, 10).map((actor) => (
+								<Box
+									key={actor.id}
+									sx={{
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+										textAlign: "center",
+										minWidth: "100px", // لضمان عدم انضغاط العناصر أثناء التمرير الأفقي
+									}}
+								>
+									<Avatar
+										src={
+											actor.profile_path
+												? `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+												: null
+										}
+										alt={actor.name}
+										sx={{ width: 80, height: 80, mb: 1, boxShadow: 3 }}
+									>
+										{actor.name.charAt(0)}
+									</Avatar>
+
+									{/* اسم الممثل الحقيقي */}
+									<Typography
+										variant="body2"
+										sx={{ fontWeight: "bold", color: "white" }}
+									>
+										{actor.name}
+									</Typography>
+
+									{/* اسم الشخصية في الفيلم */}
+									<Typography variant="caption" sx={{ color: "darkgray" }}>
+										{actor.character}
+									</Typography>
+								</Box>
+							))}
+						</Box>
+					</Box>
 				</Container>
+
+				{/* عرض الفيديو الدعائي */}
+				<Dialog
+					open={open}
+					onClose={() => setOpen(false)}
+					maxWidth="md"
+					fullWidth
+					disableScrollLock
+					PaperProps={{
+						sx: {
+							bgcolor: "#121212",
+							position: "relative",
+							overflow: "visible",
+						},
+					}}
+				>
+					{/* زر إغلاق أنيق في زاوية النافذة المنبثقة */}
+					<IconButton
+						onClick={() => setOpen(false)}
+						sx={{
+							position: "absolute",
+							top: -40, // يرفع الزر فوق الفيديو قليلاً في الشاشات الكبيرة
+							right: 0,
+							color: "white",
+							"&:hover": { color: "#ff3d47" },
+						}}
+					>
+						<CloseIcon />
+					</IconButton>
+
+					<DialogContent sx={{ p: 0, bgcolor: "black", lineHeight: 0 }}>
+						{/* التعديل الذكي للـ iframe ليكون متجاوباً بالكامل ولا يظهر حواف مشوهة */}
+						<iframe
+							width="100%"
+							height="500px" // زدنا الارتفاع قليلاً ليعطي تجربة مشاهدة مريحة على اللابتوب
+							src={
+								open
+									? `https://www.youtube.com/embed/${videoKey}?autoplay=1`
+									: ""
+							} // يشغل الفيديو تلقائياً عند الفتح، ويوقفه تماماً عند الإغلاق
+							title="YouTube video player"
+							style={{ border: "none" }} // الاستخدام البديل والأحدث لـ frameBorder
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+							allowFullScreen
+						></iframe>
+					</DialogContent>
+				</Dialog>
 			</Box>
 		</Fade>
 	);
