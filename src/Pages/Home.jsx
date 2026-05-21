@@ -13,6 +13,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import { Pagination } from "@mui/material";
 import Fade from "@mui/material/Fade";
+import Chip from "@mui/material/Chip";
 
 export default function Home() {
 	const {
@@ -23,10 +24,93 @@ export default function Home() {
 		filteredMovies,
 		setSearchQuery,
 		isLoading,
+		genreMap,
+		selectedGenre,
+		setSelectedGenre,
 	} = useContext(MovieContext);
 
 	return (
 		<div>
+			<Box
+				sx={{
+					display: "flex",
+					flexWrap: "nowrap", // يمنع الأزرار من النزول إلى سطر جديد نهائياً
+					gap: 1.5, // يحافظ على الفراغ الأنيق والثابت بين كل زر والآخر
+					overflowX: "auto", // يُجبر المتصفح على إظهار سكرول أفقي عند خروج الأزرار عن الشاشة
+					py: 2,
+					px: 1,
+					mb: 3,
+					width: "100%", // يضمن أن الحاوية تأخذ كامل عرض الشاشة المتاح
+
+					// تحسين مظهر شريط التمرير (Scrollbar) ليكون ناعماً ومتناسقاً مع التصميم الداكن
+					"&::-webkit-scrollbar": {
+						height: "6px",
+					},
+					"&::-webkit-scrollbar-track": {
+						bgcolor: "transparent",
+					},
+					"&::-webkit-scrollbar-thumb": {
+						bgcolor: "rgba(255, 255, 255, 0.15)",
+						borderRadius: "10px",
+						"&:hover": { bgcolor: "rgba(255, 255, 255, 0.3)" },
+					},
+				}}
+			>
+				<Chip
+					label="All"
+					clickable
+					onClick={() => {
+						setSelectedGenre([]);
+						setPage(1);
+					}}
+					sx={{
+						fontWeight: "bold",
+						px: 1,
+						bgcolor:
+							selectedGenre.length === 0 ? "#ff3d47" : "rgba(255,255,255,0.08)",
+						color: "white",
+						"&:hover": {
+							bgcolor:
+								selectedGenre.length === 0
+									? "#e02e37"
+									: "rgba(255,255,255,0.2)",
+						},
+					}}
+				/>
+
+				{/* 2. الأزرار الديناميكية للتصنيفات */}
+				{Object.entries(genreMap).map(([id, name]) => {
+					const isSelected = selectedGenre.includes(id);
+
+					return (
+						<Chip
+							key={id}
+							label={name}
+							clickable
+							onClick={() => {
+								if (isSelected) {
+									setSelectedGenre(selectedGenre.filter((gId) => gId !== id));
+								} else {
+									setSelectedGenre([...selectedGenre, id]);
+								}
+								setPage(1);
+							}}
+							sx={{
+								fontWeight: "bold",
+								px: 1,
+								bgcolor: isSelected ? "#ff3d47" : "rgba(255,255,255,0.08)",
+								color: "white",
+								transition: "all 0.2s ease",
+								"&:hover": {
+									bgcolor: isSelected ? "#e02e37" : "rgba(255,255,255,0.2)",
+									transform: "scale(1.05)",
+								},
+							}}
+						/>
+					);
+				})}
+			</Box>
+
 			<Container maxWidth="lg" sx={{ py: 0 }}>
 				{isLoading ? (
 					<div

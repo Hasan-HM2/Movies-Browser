@@ -4,93 +4,100 @@ import axios from "axios";
 export const MovieContext = createContext();
 
 export default function MovieProvider({ children }) {
-    const genreMap = {
-        28: "Action",
-        12: "Adventure",
-        16: "Animation",
-        35: "Comedy",
-        80: "Crime",
-        99: "Documentary",
-        18: "Drama",
-        10751: "Family",
-        14: "Fantasy",
-        36: "History",
-        27: "Horror",
-        10402: "Music",
-        9648: "Mystery",
-        10749: "Romance",
-        878: "Sci-Fi",
-        10770: "TV Movie",
-        53: "Thriller",
-        10752: "War",
-        37: "Western",
-    };
+	const genreMap = {
+		28: "Action",
+		12: "Adventure",
+		16: "Animation",
+		35: "Comedy",
+		80: "Crime",
+		99: "Documentary",
+		18: "Drama",
+		10751: "Family",
+		14: "Fantasy",
+		36: "History",
+		27: "Horror",
+		10402: "Music",
+		9648: "Mystery",
+		10749: "Romance",
+		878: "Sci-Fi",
+		10770: "TV Movie",
+		53: "Thriller",
+		10752: "War",
+		37: "Western",
+	};
 
-    const [movies, setMovies] = useState([]);
-    const [isLoading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    
-    const [watchlist, setWatchlist] = useState(() => {
-        const savedMovies = localStorage.getItem("myWatchlist");
-        return savedMovies ? JSON.parse(savedMovies) : [];
-    });
+	const [movies, setMovies] = useState([]);
+	const [isLoading, setLoading] = useState(true);
+	const [page, setPage] = useState(1);
+	const [searchQuery, setSearchQuery] = useState("");
+	const [selectedGenre, setSelectedGenre] = useState([]);
 
-    useEffect(() => {
-        localStorage.setItem("myWatchlist", JSON.stringify(watchlist));
-    }, [watchlist]);
+	const [watchlist, setWatchlist] = useState(() => {
+		const savedMovies = localStorage.getItem("myWatchlist");
+		return savedMovies ? JSON.parse(savedMovies) : [];
+	});
 
+	useEffect(() => {
+		localStorage.setItem("myWatchlist", JSON.stringify(watchlist));
+	}, [watchlist]);
 
-    // toggle watchlist
-    function toggleWatchlist(movie) { // important IEDA with some function
-        const isMovieInWatchlist = watchlist.some((item) => item.id === movie.id)
+	// toggle watchlist
+	function toggleWatchlist(movie) {
+		// important IEDA with some function
+		const isMovieInWatchlist = watchlist.some((item) => item.id === movie.id);
 
-        if (isMovieInWatchlist) {
-            setWatchlist(watchlist.filter((item) => item.id !== movie.id))
-        }
-        else {
-            setWatchlist([...watchlist, movie])
-        }
-    }
-    // ==== toggle watchlist ====
+		if (isMovieInWatchlist) {
+			setWatchlist(watchlist.filter((item) => item.id !== movie.id));
+		} else {
+			setWatchlist([...watchlist, movie]);
+		}
+	}
+	// ==== toggle watchlist ====
 
-    useEffect(() => {
-        axios
-            .get(
-                `https://api.themoviedb.org/3/movie/popular?api_key=6131397ffac639fd94093eaee78327b0&page=${page}`,
-            )
-            .then((res) => {
-                const moviesArray = res.data.results;
-                setMovies(moviesArray);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-                setLoading(false);
-            });
-    }, [page]);
+	useEffect(() => {
+		setLoading(true);
+		const genresQuery = selectedGenre.length > 0 ? selectedGenre.join(",") : "";
 
+		const baseUrl = genresQuery
+			? `https://api.themoviedb.org/3/discover/movie?api_key=6131397ffac639fd94093eaee78327b0&page=${page}&with_genres=${genresQuery}`
+			: `https://api.themoviedb.org/3/movie/popular?api_key=6131397ffac639fd94093eaee78327b0&page=${page}`;
 
-    const filteredMovies = movies.filter((movie) =>
-        movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+		axios
+			.get(baseUrl)
+			.then((res) => {
+				setMovies(res.data.results);
+				setLoading(false);
+			})
+			.catch((err) => {
+				console.log(err);
+				setLoading(false);
+			});
+	}, [page, selectedGenre]); 
 
-    return (
-        <MovieContext.Provider value={{
-            filteredMovies,
-            setMovies,
-            isLoading,
-            page,
-            setPage,
-            searchQuery,
-            setSearchQuery,
-            genreMap,
-            setLoading,
-            watchlist,
-            setWatchlist,
-            toggleWatchlist
-        }}>
-            {children}
-        </MovieContext.Provider>
-    );
+	const filteredMovies = movies.filter((movie) =>
+		movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
+	);
+
+	return (
+		<MovieContext.Provider
+			value={{
+				filteredMovies,
+				setMovies,
+				isLoading,
+				page,
+				setPage,
+				searchQuery,
+				setSearchQuery,
+				genreMap,
+				setLoading,
+				watchlist,
+				setWatchlist,
+				toggleWatchlist,
+				selectedGenre,
+				setSelectedGenre,
+			}}
+		>
+			{children}
+		</MovieContext.Provider>
+	);
 }
