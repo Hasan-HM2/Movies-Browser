@@ -55,28 +55,37 @@ export default function MovieProvider({ children }) {
 	// ==== toggle watchlist ====
 
 	useEffect(() => {
-		setLoading(true);
-		const genresQuery = selectedGenre.length > 0 ? selectedGenre.join(",") : "";
+    setLoading(true);
 
-		const baseUrl = genresQuery
-			? `https://api.themoviedb.org/3/discover/movie?api_key=6131397ffac639fd94093eaee78327b0&page=${page}&with_genres=${genresQuery}`
-			: `https://api.themoviedb.org/3/movie/popular?api_key=6131397ffac639fd94093eaee78327b0&page=${page}`;
+    const delayDebounceFn = setTimeout(() => {
+        let baseUrl = "";
 
-		axios
-			.get(baseUrl)
-			.then((res) => {
-				setMovies(res.data.results);
-				setLoading(false);
-			})
-			.catch((err) => {
-				console.log(err);
-				setLoading(false);
-			});
-	}, [page, selectedGenre]); 
+        if (searchQuery.trim() !== "") {
+            baseUrl = `https://api.themoviedb.org/3/search/movie?api_key=6131397ffac639fd94093eaee78327b0&page=${page}&query=${encodeURIComponent(searchQuery)}`;
+        } else {
+            const genresQuery = selectedGenre.length > 0 ? selectedGenre.join(",") : "";
+            baseUrl = genresQuery
+                ? `https://api.themoviedb.org/3/discover/movie?api_key=6131397ffac639fd94093eaee78327b0&page=${page}&with_genres=${genresQuery}`
+                : `https://api.themoviedb.org/3/movie/popular?api_key=6131397ffac639fd94093eaee78327b0&page=${page}`;
+        }
 
-	const filteredMovies = movies.filter((movie) =>
-		movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
-	);
+        axios
+            .get(baseUrl)
+            .then((res) => {
+                setMovies(res.data.results);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
+    }, 1000); // تأخير نصف ثانية
+
+    return () => clearTimeout(delayDebounceFn);
+
+}, [page, selectedGenre, searchQuery]);
+
+	const filteredMovies = movies;
 
 	return (
 		<MovieContext.Provider

@@ -33,7 +33,7 @@ export default function MovieDetails() {
 	const [movie, setMovie] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
-	const { toggleWatchlist, watchlist } = useContext(MovieContext);
+	const { toggleWatchlist, watchlist, setSearchQuery } = useContext(MovieContext);
 	const [cast, setCast] = useState([]);
 	const [videoKey, setVideoKey] = useState("");
 	const [open, setOpen] = useState(false);
@@ -112,7 +112,10 @@ export default function MovieDetails() {
 				<Container maxWidth="lg">
 					<Button
 						startIcon={<ArrowBackIcon />}
-						onClick={() => navigate("/")}
+						onClick={() => {
+							navigate("/");
+							setSearchQuery("");
+						}}
 						sx={{
 							color: "white",
 							mb: 2,

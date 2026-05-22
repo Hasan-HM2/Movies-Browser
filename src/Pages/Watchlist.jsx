@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react"; // 1. أضفنا useEffect هنا
 import { MovieContext } from "../context/MovieContext";
 import MovieCard from "../MovieCard";
 
@@ -10,57 +10,59 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Fade from "@mui/material/Fade";
 
 export default function Watchlist() {
-	const { watchlist, setWatchlist, searchQuery, isLoading } =
-		useContext(MovieContext);
+    const { watchlist, setWatchlist, searchQuery, setSearchQuery, isLoading } =
+        useContext(MovieContext); // 2. استدعينا دالة setSearchQuery من الـ Context
 
-	const filteredWatchlist = watchlist.filter((movie) =>
-		movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
-	);
+    useEffect(() => {
+        setSearchQuery(""); 
+    }, []);
 
-	return (
-		<Fade in={!isLoading} timeout={600}>
-			<div>
-				{filteredWatchlist.length === 0 ? (
-					<div
-						style={{ fontSize: "35px", color: "white", textAlign: "center" }}
-					>
-						your list is empty
-					</div>
-				) : (
-					<Container maxWidth="lg" sx={{ py: 4 }}>
-						<Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
-							{filteredWatchlist.map((movie) => (
-								<MovieCard key={movie.id} movie={movie} />
-							))}
-						</Grid>
+    const filteredWatchlist = watchlist.filter((movie) =>
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
 
-						<div
-							style={{
-								display: "flex",
-								marginTop: "5%",
-								justifyContent: "center",
-							}}
-						>
-							<Button
-								onClick={() => {
-									if (
-										window.confirm(
-											"Are you sure you want to delete all movies from your watchlist?",
-										)
-									) {
-										setWatchlist([]);
-									}
-								}}
-								variant="outlined"
-								startIcon={<DeleteIcon />}
-								color="error"
-							>
-								Delete All
-							</Button>
-						</div>
-					</Container>
-				)}
-			</div>
-		</Fade>
-	);
+    return (
+        <Fade in={!isLoading} timeout={600}>
+            <div>
+                {filteredWatchlist.length === 0 ? (
+                    <div style={{ fontSize: "35px", color: "white", textAlign: "center", marginTop: "10%" }}>
+                        {searchQuery ? "No matching movies found" : "Your list is empty"}
+                    </div>
+                ) : (
+                    <Container maxWidth="lg" sx={{ py: 4 }}>
+                        <Grid container spacing={4} columns={{ xs: 4, sm: 8, md: 12 }}>
+                            {filteredWatchlist.map((movie) => (
+                                <MovieCard key={movie.id} movie={movie} />
+                            ))}
+                        </Grid>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                marginTop: "5%",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Button
+                                onClick={() => {
+                                    if (
+                                        window.confirm(
+                                            "Are you sure you want to delete all movies from your watchlist?",
+                                        )
+                                    ) {
+                                        setWatchlist([]);
+                                    }
+                                }}
+                                variant="outlined"
+                                startIcon={<DeleteIcon />}
+                                color="error"
+                            >
+                                Delete All
+                            </Button>
+                        </div>
+                    </Container>
+                )}
+            </div>
+        </Fade>
+    );
 }
