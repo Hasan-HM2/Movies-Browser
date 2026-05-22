@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"; // 1. أضفنا useEffect هنا
+import { useContext, useEffect } from "react";
 import { MovieContext } from "../context/MovieContext";
 import MovieCard from "../MovieCard";
 
@@ -10,8 +10,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Fade from "@mui/material/Fade";
 
 export default function Watchlist() {
-    const { watchlist, setWatchlist, searchQuery, setSearchQuery, isLoading } =
-        useContext(MovieContext); // 2. استدعينا دالة setSearchQuery من الـ Context
+    const { watchlist, setWatchlist, searchQuery, setSearchQuery } =
+        useContext(MovieContext); 
 
     useEffect(() => {
         setSearchQuery(""); 
@@ -22,7 +22,7 @@ export default function Watchlist() {
     );
 
     return (
-        <Fade in={!isLoading} timeout={600}>
+        <Fade in={true} timeout={400}>
             <div>
                 {filteredWatchlist.length === 0 ? (
                     <div style={{ fontSize: "35px", color: "white", textAlign: "center", marginTop: "10%" }}>

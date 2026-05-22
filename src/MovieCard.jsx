@@ -65,7 +65,7 @@ export default function MovieCard({ movie }) {
 					}}
 				>
 					<Typography gutterBottom variant="h5" component="div">
-						{movie.title}
+						{movie?.title}
 					</Typography>
 
 					{/* Rating & FAV */}
@@ -80,7 +80,7 @@ export default function MovieCard({ movie }) {
 					>
 						<div style={{ display: "flex", alignItems: "center" }}>
 							<Typography variant="body1" sx={{ ml: 1, color: "white" }}>
-								{movie.vote_average.toFixed(1)}
+								{movie.vote_average ? movie.vote_average.toFixed(1) : "N/A"}
 							</Typography>
 							<Typography sx={{ ml: 1, color: "white", fontSize: "18px" }}>
 								⭐
@@ -115,7 +115,7 @@ export default function MovieCard({ movie }) {
 					</Box>
 
 					<Typography variant="body2" sx={{ color: "#b3b3b3", flexGrow: 1 }}>
-						{movie.overview.length > 100
+						{movie.overview?.length > 100
 							? movie.overview?.substring(0, 100) + "..."
 							: movie?.overview}
 					</Typography>
@@ -126,7 +126,7 @@ export default function MovieCard({ movie }) {
 						component="div"
 						sx={{ color: "gold", mt: 1 }}
 					>
-						Year: {movie.release_date.substring(0, 4)}
+						Year: {movie.release_date?.substring(0, 4)}
 					</Typography>
 
 					<Box sx={{ mb: 1, display: "flex", flexWrap: "wrap", gap: 0.5 }}>
