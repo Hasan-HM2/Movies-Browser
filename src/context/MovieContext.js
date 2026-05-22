@@ -86,7 +86,7 @@ export default function MovieProvider({ children }) {
 					console.log(err);
 					setLoading(false);
 				});
-		}, 1000); // تأخير نصف ثانية
+		}, 600); 
 
 		return () => clearTimeout(delayDebounceFn);
 	}, [page, selectedGenre, searchQuery]);
