@@ -12,10 +12,13 @@ import Home from "./Pages/Home";
 import MovieDetails from "./Pages/MovieDetails";
 import Watchlist from "./Pages/Watchlist";
 import NotFound from "./NotFound";
+import { Analytics } from "@vercel/analytics/react"
+
 
 function App() {
 	return (
 		<div className="App">
+			<Analytics/>
 			<Navbar />
 			<Box sx={{ pt: "auto" }}>
 				<Routes>

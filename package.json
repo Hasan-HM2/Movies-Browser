@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.0",
     "@mui/material": "^6.1.0",
+    "@vercel/analytics": "^2.0.1",
     "ajv": "^8.18.0",
     "ajv-keywords": "^5.1.0",
     "axios": "^1.7.7",
