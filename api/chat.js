@@ -9,12 +9,11 @@ export default async function handler(req, res) {
   try {
     const { input } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
-
     // التوجيه المخفي وضعناه هنا في الخادم لحمايته
     const promptContext = `أنت خبير سينمائي ومساعد ذكي في تطبيق اسمه 'Movies Browser'. 
         أجب على رسالة المستخدم التالية باختصار، وبأسلوب ممتع وجذاب، ودائماً باللغة العربية، وتحدث عن الأفلام والسينما والمسلسلات فقط: ${input}`;
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
