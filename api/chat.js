@@ -14,8 +14,7 @@ export default async function handler(req, res) {
     const promptContext = `أنت خبير سينمائي ومساعد ذكي في تطبيق اسمه 'Movies Browser'. 
         أجب على رسالة المستخدم التالية باختصار، وبأسلوب ممتع وجذاب، ودائماً باللغة العربية، وتحدث عن الأفلام والسينما والمسلسلات فقط: ${input}`;
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
-
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
