@@ -83,19 +83,21 @@ export default function Chatbot() {
       {/* نافذة الدردشة مع حركة Zoom */}
       <Zoom in={isOpen}>
         <Paper
-          elevation={10}
+          elevation={5}
           sx={{
             position: "fixed",
-            bottom: 90,
-            right: 20,
-            width: 350,
-            height: 500,
-            zIndex: 1000,
+            // تعديل المسافة من الأسفل واليمين لتناسب الجوال والشاشات الكبيرة
+            bottom: { xs: 85, sm: 90 },
+            right: { xs: "5%", sm: 20 },
+            // عرض مرن: 90% من الشاشة في الجوال، و 380px في الشاشات الكبيرة
+            width: { xs: "90%", sm: 380 },
+            // ارتفاع مرن: 70% من طول الشاشة في الجوال، و 500px في الشاشات الكبيرة
+            height: { xs: "70vh", sm: 500 },
             display: "flex",
             flexDirection: "column",
+            borderRadius: "16px",
             overflow: "hidden",
-            borderRadius: 4,
-            border: "1px solid #e0e0e0",
+            zIndex: 1000,
           }}
         >
           {/* رأس النافذة */}
