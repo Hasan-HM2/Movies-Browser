@@ -12,25 +12,26 @@ import Home from "./Pages/Home";
 import MovieDetails from "./Pages/MovieDetails";
 import Watchlist from "./Pages/Watchlist";
 import NotFound from "./NotFound";
-import { Analytics } from "@vercel/analytics/react"
-
+import { Analytics } from "@vercel/analytics/react";
+import Chatbot from "./Chatbot";
 
 function App() {
-	return (
-		<div className="App">
-			<Analytics/>
-			<Navbar />
-			<Box sx={{ pt: "auto" }}>
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/movie/:id" element={<MovieDetails />} />
-					<Route path="/watchlist" element={<Watchlist />} />
+  return (
+    <div className="App">
+      <Analytics />
+      <Navbar />
+      <Box sx={{ pt: "auto" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/watchlist" element={<Watchlist />} />
 
-					<Route path="*" element={<NotFound />} />
-				</Routes>
-			</Box>
-		</div>
-	);
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Box>
+      <Chatbot />
+    </div>
+  );
 }
 
 export default App;
